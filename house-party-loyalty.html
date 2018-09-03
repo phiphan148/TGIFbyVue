@@ -82,9 +82,14 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <h5>House at a glance</h5>
-                    <table id="glance" class="table table-bordered mt-3">
-                        <tbody id="statistics">
-                            <tr v-for="item in glanceStatistics">
+                    <table class="table table-bordered mt-3">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th v-for="label in statisticsGlanceHeader">{{label}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in statisticsGlance.info">
                                 <td>{{ item.label }}</td>
                                 <td>{{ item.Partyinfo.Memnum }}</td>
                                 <td>{{ item.Partyinfo.PctVotes }}</td>
@@ -97,11 +102,37 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <h5>Most Engaged (Top 10% of most votes with party)</h5>
-                    <table class="top table table-bordered mt-3"></table>
+                    <table class="table table-bordered mt-3">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th v-for="label in loyaltyHeader">{{label}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="mem in mostEngaged">
+                                <td><a class="text-body" v-bind:href="mem.url">{{mem.first_name}} {{mem.middle_name}} {{mem.last_name}}</a></td>
+                                <td>{{Math.round(((mem.total_votes - mem.missed_votes) * mem.votes_with_party_pct) / 100)}}</td>
+                                <td>{{mem.votes_with_party_pct}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <h5>Least Engaged (Top 10% of least votes with party)</h5>
-                    <table class="least table table-bordered mt-3"></table>
+                    <table class="table table-bordered mt-3">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th v-for="label in loyaltyHeader">{{label}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="mem in leastEngaged ">
+                                <td><a class="text-body" v-bind:href="mem.url">{{mem.first_name}} {{mem.middle_name}} {{mem.last_name}}</a></td>
+                                <td>{{Math.round(((mem.total_votes - mem.missed_votes) * mem.votes_with_party_pct) / 100)}}</td>
+                                <td>{{mem.votes_with_party_pct}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
