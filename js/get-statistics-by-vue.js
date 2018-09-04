@@ -21,12 +21,16 @@ var byVue = new Vue({
             let currentPage = window.location.href;
             let typeSenator = 'attendance';
             if (currentPage.includes(pathSenate)) {
-                url = 'https://api.myjson.com/bins/1eja30';
+                url = 'https://api.propublica.org/congress/v1/113/senate/members.json';
 
             } else {
-                url = 'https://api.myjson.com/bins/j83do';
+                url = 'https://api.propublica.org/congress/v1/113/house/members.json';
             }
-            fetch(url)
+            fetch(url, {
+                headers: new Headers({
+                    'X-API-Key': 'IDNOGYtoaM3H3Og0JfELv2zGX5cPeooGRMCiUWdl'
+                })
+            })
                 .then(response => response.json())
                 .then((jsonData) => {
                     data = jsonData;
@@ -54,11 +58,11 @@ var byVue = new Vue({
                 });
         },
         getStatisticsGlance: function (memberData, statistics) {
-            memberData.forEach(element => {
+            memberData.forEach(mem => {
                 for (let i = 0; i < statistics.info.length; i++) {
-                    if (element.party === statistics.info[i].Partyinfo.party) {
+                    if (mem.party === statistics.info[i].Partyinfo.party) {
                         statistics.info[i].Partyinfo.Memnum += 1;
-                        statistics.info[i].Partyinfo.PctVotes += element.votes_with_party_pct;
+                        statistics.info[i].Partyinfo.PctVotes += mem.votes_with_party_pct;
                     }
                 }
             })
@@ -77,7 +81,7 @@ var byVue = new Vue({
             for (let i = 0; i < this.memberData.length * 0.1; i++) {
                 array.push(this.memberData[i])
             }
-        }
+        },
     },
 })
 

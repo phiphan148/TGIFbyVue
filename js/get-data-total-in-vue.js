@@ -1,6 +1,6 @@
 var data;
 
-var byVue = new Vue({
+window.app = new Vue({
     el: "#main-content",
     data: {
         senator: [],
@@ -9,6 +9,13 @@ var byVue = new Vue({
         checkarr: [],
         selectarr: '',
         headerArray: ['Full Name', 'Party', 'State', 'Seniority', 'Percentage of vote'],
+        searchName: '',
+        tempt: [],
+        fields: {name: {label: 'Full name', key: 'fullname',sortable: true},
+                party: {label: 'Party',},
+                state: {label: 'State',},
+                seniority: {label: 'Senority',},
+                percentageVotes: {label: 'Percentage of vote',key: 'votes_with_party_pct',sortable: true}},
     },
     created: function () {
         this.getData();
@@ -16,11 +23,13 @@ var byVue = new Vue({
     computed: {
         displayParty() {
             if (this.checkarr.length == 0 && this.selectarr == '') {
-                return this.senator;
+                return this.searchData(this.senator);
             } else if (this.checkarr.length != 0 && this.selectarr == '') {
-                return this.senator.filter(j => this.checkarr.includes(j.party))
+                this.tempt = this.senator.filter(j => this.checkarr.includes(j.party));
+                return this.searchData(this.tempt)
             } else if (this.selectarr != '' && this.checkarr.length == 0) {
-                return this.senator.filter(j => this.selectarr.includes(j.state))
+                this.tempt = this.senator.filter(j => this.selectarr.includes(j.state));
+                return this.searchData(this.tempt)                
             } else {
                 let memFilter = [];
                 for (let j = 0; j < this.senator.length; j++) {
@@ -30,9 +39,9 @@ var byVue = new Vue({
                         }
                     }
                 }
-                return memFilter;
+                return this.searchData(memFilter)
             }
-        }
+        },
     },
     methods: {
         getData: function () {
@@ -40,26 +49,34 @@ var byVue = new Vue({
             let url = '';
             let currentPage = window.location.href;
             if (currentPage.includes(pathSenate)) {
-                url = 'https://api.myjson.com/bins/1eja30';
+                url = 'https://api.propublica.org/congress/v1/113/senate/members.json';
 
             } else {
-                url = 'https://api.myjson.com/bins/j83do';
+                url = 'https://api.propublica.org/congress/v1/113/house/members.json';
             }
-            fetch(url)
+            fetch(url, {
+               headers: new Headers({
+               'X-API-Key': 'IDNOGYtoaM3H3Og0JfELv2zGX5cPeooGRMCiUWdl'})
+            })
                 .then(response => response.json())
                 .then((jsonData) => {
                     data = jsonData;
                     this.senator = data.results[0].members;
+                    this.senator.forEach(mem => {
+                        mem.fullname = (mem.first_name + ' ' + mem.middle_name + ' ' + mem.last_name).replace(null,'');
+                    });
                     this.getStates();
                 });
         },
         getStates: function () {
-            for(let i=0; i<this.senator.length; i++){
+            for (let i = 0; i < this.senator.length; i++) {
                 if (!this.statesarr.includes(this.senator[i].state)) {
                     this.statesarr.push(this.senator[i].state);
                 }
             }
+        },
+        searchData: function(array){
+            return array.filter(mem => mem.first_name.toLowerCase().includes(this.searchName.toLowerCase()) || mem.votes_with_party_pct.toString().includes(this.searchName.toLowerCase()))
         }
     },
-
 })
