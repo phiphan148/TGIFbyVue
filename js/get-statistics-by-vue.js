@@ -20,21 +20,31 @@ var byVue = new Vue({
             let url = '';
             let currentPage = window.location.href;
             let typeSenator = 'attendance';
+            // if (currentPage.includes(pathSenate)) {
+            //     url = 'https://api.propublica.org/congress/v1/113/senate/members.json';
+
+            // } else {
+            //     url = 'https://api.propublica.org/congress/v1/113/house/members.json';
+            // }
+            // fetch(url, {
+            //     headers: new Headers({
+            //         'X-API-Key': 'IDNOGYtoaM3H3Og0JfELv2zGX5cPeooGRMCiUWdl'
+            //     })
+            // })
             if (currentPage.includes(pathSenate)) {
-                url = 'https://api.propublica.org/congress/v1/113/senate/members.json';
+                url = 'https://api.myjson.com/bins/1eja30';
 
             } else {
-                url = 'https://api.propublica.org/congress/v1/113/house/members.json';
+                url = 'https://api.myjson.com/bins/j83do';
             }
-            fetch(url, {
-                headers: new Headers({
-                    'X-API-Key': 'IDNOGYtoaM3H3Og0JfELv2zGX5cPeooGRMCiUWdl'
-                })
-            })
+            fetch(url)
                 .then(response => response.json())
                 .then((jsonData) => {
                     data = jsonData;
                     this.memberData = data.results[0].members;
+                    this.memberData.forEach(mem => {
+                        mem.fullname = (mem.first_name + ' ' + mem.middle_name + ' ' + mem.last_name).replace(null,'');
+                    });
                     if (currentPage.includes(typeSenator)) {
                         this.memberData.sort(function (a, b) { return a.missed_votes - b.missed_votes });
                         this.getCalculation(this.mostEngaged);

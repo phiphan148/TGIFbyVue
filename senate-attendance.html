@@ -17,7 +17,7 @@
         <div>
             <div class="container-fluid h-100">
                 <div class="row h-100">
-                    <div class="col-1">
+                    <div class="col-1 img-home">
                         <a href="./index.html"><img src="./images/logo.png" class="img-fluid" alt="logo"></a>
                     </div>
                     <div class="col-1 align-self-center">
@@ -115,7 +115,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="mem in mostEngaged">
-                                <td><a class="text-body" v-bind:href="mem.url">{{mem.first_name}} {{mem.middle_name}} {{mem.last_name}}</a></td>
+                                <td><a class="text-body" v-bind:href="mem.url">{{mem.fullname}}</a></td>
                                 <td>{{mem.missed_votes}}</td>
                                 <td>{{mem.missed_votes_pct}}</td>
                             </tr>
@@ -132,7 +132,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="mem in leastEngaged">
-                                <td><a class="text-body" v-bind:href="mem.url">{{mem.first_name}} {{mem.middle_name}} {{mem.last_name}}</a></td>
+                                <td><a class="text-body" v-bind:href="mem.url">{{mem.fullname}}</a></td>
                                 <td>{{mem.missed_votes}}</td>
                                 <td>{{mem.missed_votes_pct}}</td>
                             </tr>

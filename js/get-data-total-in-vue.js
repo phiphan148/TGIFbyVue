@@ -8,14 +8,13 @@ window.app = new Vue({
         statesarr: [],
         checkarr: [],
         selectarr: '',
-        headerArray: ['Full Name', 'Party', 'State', 'Seniority', 'Percentage of vote'],
         searchName: '',
         tempt: [],
         fields: {name: {label: 'Full name', key: 'fullname',sortable: true},
                 party: {label: 'Party',},
                 state: {label: 'State',},
                 seniority: {label: 'Senority',},
-                percentageVotes: {label: 'Percentage of vote',key: 'votes_with_party_pct',sortable: true}},
+                percentageVotes: {label: 'Pct of vote',key: 'votes_with_party_pct',sortable: true}},
     },
     created: function () {
         this.getData();
@@ -76,7 +75,7 @@ window.app = new Vue({
             }
         },
         searchData: function(array){
-            return array.filter(mem => mem.first_name.toLowerCase().includes(this.searchName.toLowerCase()) || mem.votes_with_party_pct.toString().includes(this.searchName.toLowerCase()))
+            return array.filter(mem => mem.fullname.toLowerCase().includes(this.searchName.toLowerCase()) || mem.votes_with_party_pct.toString().includes(this.searchName.toLowerCase()))
         }
     },
 })
